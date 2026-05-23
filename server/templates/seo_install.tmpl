@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ .Title }}</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f3f4f6;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,"Microsoft YaHei",sans-serif}.install-wrap{max-width:980px;margin:0 auto;padding:28px 18px 48px}.install-head{margin-bottom:22px}.install-head h1{margin:0 0 8px;font-size:30px}.install-head p{margin:0;color:#64748b}.install-card{background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 14px 35px rgba(15,23,42,.08);padding:24px}.install-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.install-section{margin-top:24px;border-top:1px solid #eef2f7;padding-top:20px}.install-section h2{margin:0 0 14px;font-size:18px}.install-field{display:grid;gap:7px}.install-field label{font-weight:700;color:#334155}.install-field input{width:100%;height:40px;border:1px solid #d1d5db;border-radius:8px;padding:8px 10px;font-size:14px}.install-help{color:#64748b;font-size:13px}.install-alert{border-radius:8px;margin-bottom:16px;padding:12px 14px}.install-alert.error{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}.install-alert.success{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0}.install-note{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;color:#475569;margin-bottom:16px;padding:12px 14px}.install-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}.install-actions button,.install-actions a{border:0;border-radius:8px;background:#111827;color:#fff;cursor:pointer;font-size:15px;font-weight:700;padding:11px 18px;text-decoration:none}.install-actions a{background:#0f766e}.install-foot{color:#64748b;font-size:13px;margin-top:18px;text-align:center}@media(max-width:760px){.install-grid{grid-template-columns:1fr}.install-card{padding:18px}.install-head h1{font-size:24px}.install-actions{flex-direction:column}.install-actions button,.install-actions a{width:100%}}
+  </style>
+</head>
+<body>
+  <main class="install-wrap">
+    <header class="install-head">
+      <h1>wjfcm-go 安装向导</h1>
+      <p>填写数据库和管理员信息后，系统会自动建表、写入初始数据并生成生产配置。</p>
+    </header>
+    <section class="install-card">
+      {{ if .Error }}<div class="install-alert error">{{ .Error }}</div>{{ end }}
+      {{ if .Success }}<div class="install-alert success">{{ .Success }}</div>{{ end }}
+      <div class="install-note">{{ .RequireNote }}</div>
+      {{ if .Installed }}
+        <div class="install-actions">
+          <a href="/admin/login">进入后台</a>
+          <a href="/">访问前台</a>
+        </div>
+      {{ else }}
+      <form method="post" action="/install">
+        <section>
+          <h2>站点配置</h2>
+          <div class="install-grid">
+            <div class="install-field">
+              <label for="app_name">站点名称</label>
+              <input id="app_name" name="app_name" value="{{ .Form.AppName }}" required>
+            </div>
+            <div class="install-field">
+              <label for="app_url">站点地址</label>
+              <input id="app_url" name="app_url" value="{{ .Form.AppURL }}" placeholder="https://www.example.com" required>
+            </div>
+            <div class="install-field">
+              <label for="app_port">服务端口</label>
+              <input id="app_port" name="app_port" value="{{ .Form.AppPort }}" required>
+            </div>
+            <div class="install-field">
+              <label for="public_dir">Public 目录</label>
+              <input id="public_dir" name="public_dir" value="{{ .Form.PublicDir }}" required>
+              <span class="install-help">生产示例：/www/wwwroot/wjfcm-go/public</span>
+            </div>
+            <div class="install-field">
+              <label for="upload_base_path">上传目录名</label>
+              <input id="upload_base_path" name="upload_base_path" value="{{ .Form.UploadBasePath }}" required>
+            </div>
+          </div>
+        </section>
+        <section class="install-section">
+          <h2>数据库配置</h2>
+          <div class="install-grid">
+            <div class="install-field">
+              <label for="db_host">数据库地址</label>
+              <input id="db_host" name="db_host" value="{{ .Form.DBHost }}" required>
+            </div>
+            <div class="install-field">
+              <label for="db_port">数据库端口</label>
+              <input id="db_port" name="db_port" value="{{ .Form.DBPort }}" required>
+            </div>
+            <div class="install-field">
+              <label for="db_database">数据库名</label>
+              <input id="db_database" name="db_database" value="{{ .Form.DBDatabase }}" required>
+            </div>
+            <div class="install-field">
+              <label for="db_username">数据库账号</label>
+              <input id="db_username" name="db_username" value="{{ .Form.DBUsername }}" required>
+            </div>
+            <div class="install-field">
+              <label for="db_password">数据库密码</label>
+              <input id="db_password" name="db_password" type="password" value="{{ .Form.DBPassword }}">
+            </div>
+            <div class="install-field">
+              <label for="db_prefix">数据表前缀</label>
+              <input id="db_prefix" name="db_prefix" value="{{ .Form.DBPrefix }}" required>
+            </div>
+          </div>
+        </section>
+        <section class="install-section">
+          <h2>超级管理员</h2>
+          <div class="install-grid">
+            <div class="install-field">
+              <label for="admin_account">登录账号</label>
+              <input id="admin_account" name="admin_account" value="{{ .Form.AdminAccount }}" required>
+            </div>
+            <div class="install-field">
+              <label for="admin_username">管理员昵称</label>
+              <input id="admin_username" name="admin_username" value="{{ .Form.AdminUsername }}" required>
+            </div>
+            <div class="install-field">
+              <label for="admin_password">登录密码</label>
+              <input id="admin_password" name="admin_password" type="password" required>
+            </div>
+            <div class="install-field">
+              <label for="confirm_password">确认密码</label>
+              <input id="confirm_password" name="confirm_password" type="password" required>
+            </div>
+          </div>
+        </section>
+        <div class="install-actions">
+          <button type="submit">开始安装</button>
+        </div>
+      </form>
+      {{ end }}
+    </section>
+    <p class="install-foot">Copyright © 2019-{{ .Year }} wjfcm-go</p>
+  </main>
+</body>
+</html>

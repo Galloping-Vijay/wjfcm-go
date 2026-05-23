@@ -15,6 +15,15 @@ go run ./cmd/api
 http://localhost:8080
 ```
 
+新站点初始化安装：
+
+```text
+GET /install
+POST /install
+```
+
+安装向导会创建数据库表、写入初始管理员和基础配置，并生成 `.env` 与 `.install.lock`。安装成功后请重启服务。
+
 前台 SEO 页面：
 
 ```text

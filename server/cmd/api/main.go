@@ -13,7 +13,8 @@ func main() {
 
 	db, err := database.Open(cfg)
 	if err != nil {
-		log.Fatalf("connect database: %v", err)
+		log.Printf("connect database: %v", err)
+		log.Printf("database is unavailable, only installer routes may work")
 	}
 
 	r := router.New(cfg, db)

@@ -56,6 +56,7 @@ func New(cfg config.Config, db *gorm.DB) *gin.Engine {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
+	r.Use(installGuard(db))
 
 	auth := handler.NewAuthHandler(cfg, db)
 	homeAuth := handler.NewHomeAuthHandler(cfg, db)
@@ -72,10 +73,13 @@ func New(cfg config.Config, db *gorm.DB) *gin.Engine {
 	seoPages := handler.NewSEOPageHandler(db)
 	wechat := handler.NewWechatHandler(cfg, db)
 	baidu := handler.NewBaiduHandler(cfg)
+	installer := handler.NewInstallHandler(cfg, db)
 
 	r.Static("/uploads", cfg.Upload.PublicDir+"/"+cfg.Upload.BasePath)
 	r.Static("/images", cfg.Upload.PublicDir+"/images")
 	r.StaticFile("/favicon.ico", cfg.Upload.PublicDir+"/favicon.ico")
+	r.GET("/install", installer.Show)
+	r.POST("/install", installer.Store)
 	r.GET("/", seoPages.Index)
 	r.GET("/category/:id", seoPages.Category)
 	r.GET("/tag/:id", seoPages.Tag)
@@ -224,6 +228,32 @@ func New(cfg config.Config, db *gorm.DB) *gin.Engine {
 	r.NoRoute(servePublicRootFile(cfg.Upload.PublicDir))
 
 	return r
+}
+
+func installGuard(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		path := c.Request.URL.Path
+		if path == "/install" || strings.HasPrefix(path, "/images/") || path == "/favicon.ico" {
+			c.Next()
+			return
+		}
+		if handler.IsInstalled(db) {
+			if db == nil {
+				c.String(http.StatusServiceUnavailable, "database unavailable, please check .env and restart service")
+				c.Abort()
+				return
+			}
+			c.Next()
+			return
+		}
+		if c.Request.Method == http.MethodGet || c.Request.Method == http.MethodHead {
+			c.Redirect(http.StatusFound, "/install")
+			c.Abort()
+			return
+		}
+		c.String(http.StatusServiceUnavailable, "system is not installed")
+		c.Abort()
+	}
 }
 
 func servePublicRootFile(publicDir string) gin.HandlerFunc {

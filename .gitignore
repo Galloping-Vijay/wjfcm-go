@@ -2,6 +2,10 @@
 .env
 *.local
 server/.env
+server/.env.local
+server/.env.prod
+server/.env.bak.*
+server/.install.lock
 web/.env
 
 # Go

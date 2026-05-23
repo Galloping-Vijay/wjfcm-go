@@ -16,6 +16,7 @@ wjfcm-go/
 ## 当前能力
 
 - `server/` 已完成 Gin 基础骨架、数据库连接、JWT 登录、文章/分类/标签基础接口。
+- 新安装环境支持访问 `/install` 初始化：填写数据库、站点信息和超级管理员后自动建表、写入初始数据并生成 `.env`。
 - 前台公开页面已改为 Gin 服务端渲染：首页、分类、标签、搜索、归档、有些话、文章详情、`robots.txt`、`sitemap.xml` 会直接输出完整 HTML。
 - `web/` 现在只保留 Vue 后台，不再承载前台页面。
 - `public/` 放站点公开资源和域名根目录验证文件，例如 `favicon.ico`、`ads.txt`、`bdunion.txt`、`google*.html`。
@@ -47,6 +48,7 @@ Sitemap: http://localhost:8080/sitemap.xml
 Robots: http://localhost:8080/robots.txt
 API 健康检查: http://localhost:8080/api/health
 根验证文件: http://localhost:8080/ads.txt
+安装向导: http://localhost:8080/install
 ```
 
 ### Vue 后台
@@ -80,7 +82,9 @@ VITE_API_BASE_URL=http://localhost:8080/api
 
 ### 1. 后端部署
 
-先准备生产环境配置：
+如果是新站点，可以只准备 `.env.example` 或一个最小 `.env`，启动后访问 `/install` 走安装向导。安装向导会连接数据库、创建数据表、写入基础配置和超级管理员，并生成正式 `.env`。
+
+如果是已有站点或手工部署，先准备生产环境配置：
 
 ```bash
 cd wjfcm-go/server
@@ -209,7 +213,7 @@ server {
     root /www/wwwroot/wjfcm-go/web/dist;
     index index.html;
 
-    location ~ ^/(api|article|category|tag|search|archive|chat|robots\.txt|sitemap\.xml)(/|$) {
+    location ~ ^/(api|article|category|tag|search|archive|chat|login|register|forgot-password|user|install|blank|robots\.txt|sitemap\.xml|tools|wechat|baidu)(/|$) {
         proxy_pass http://127.0.0.1:8080;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -281,6 +285,7 @@ VITE_API_BASE_URL=/api
 | `/chat` | Gin | 有些话 SEO HTML |
 | `/robots.txt` | Gin | 搜索引擎规则 |
 | `/sitemap.xml` | Gin | 站点地图 |
+| `/install` | Gin | 新站点初始化安装 |
 | `/api/*` | Gin | API |
 | `/admin/*` | Vue | 后台管理 |
 | `/login`、`/register`、`/forgot-password`、`/user` | Gin | 用户交互页 HTML+JS |

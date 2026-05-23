@@ -10,7 +10,9 @@
 wjfcm-go-release/
   server/
     wjfcm-go-api        # Go 编译后的二进制文件
-    .env                # 生产配置，服务器上单独维护，不提交 Git
+    .env                # 生产配置，服务器上单独维护，不提交 Git；新站点也可以通过 /install 生成
+    .env.example        # 可选，安装前作为配置参考
+    .install.lock       # 安装成功后生成，用于防止重复安装
     templates/          # Gin 前台 SEO 模板，运行时需要
   web/
     dist/               # Vue 后台构建产物
@@ -114,7 +116,46 @@ Copy-Item public\* release\public -Recurse
 Copy-Item server\.env.example release\server\.env.example
 ```
 
-生产 `.env` 建议在服务器上手工创建或通过 CI Secret 注入，不建议从开发机直接打包真实密码。
+生产 `.env` 建议在服务器上手工创建、通过 CI Secret 注入，或第一次启动后访问 `/install` 生成。不建议从开发机直接打包真实密码。
+
+## 首次安装向导
+
+新服务器第一次部署时，可以先上传二进制、`templates/`、`web/dist/`、`public/` 和 `server/.env.example`，然后启动服务：
+
+```bash
+systemctl start wjfcm-go-api
+```
+
+打开：
+
+```text
+https://www.example.com/install
+```
+
+安装向导会完成：
+
+- 检查安装状态。
+- 填写站点名称、站点地址、服务端口。
+- 填写数据库地址、端口、库名、账号、密码、表前缀。
+- 填写超级管理员账号和密码。
+- 自动创建数据库和数据表。
+- 写入超级管理员、角色、权限菜单、基础系统配置、默认分类和前台导航。
+- 生成 `server/.env`。
+- 生成 `server/.install.lock`，防止重复安装。
+
+安装成功后需要重启服务，让新 `.env` 生效：
+
+```bash
+systemctl restart wjfcm-go-api
+```
+
+然后访问：
+
+```text
+https://www.example.com/admin/login
+```
+
+如果要重新安装，必须先备份数据库和上传文件，再删除服务器上的 `server/.install.lock`。生产环境不要随意删除安装锁。
 
 ## 上传到服务器
 
@@ -200,7 +241,7 @@ server {
     root /www/wwwroot/wjfcm-go/web/dist;
     index index.html;
 
-    location ~ ^/(api|article|category|tag|search|archive|chat|login|register|forgot-password|user|blank|robots\.txt|sitemap\.xml|tools|wechat|baidu)(/|$) {
+    location ~ ^/(api|article|category|tag|search|archive|chat|login|register|forgot-password|user|install|blank|robots\.txt|sitemap\.xml|tools|wechat|baidu)(/|$) {
         proxy_pass http://127.0.0.1:8080;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
