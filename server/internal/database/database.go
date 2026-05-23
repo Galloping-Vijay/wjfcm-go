@@ -26,7 +26,7 @@ func Open(cfg config.Config) (*gorm.DB, error) {
 			TablePrefix:   cfg.DB.Prefix,
 			SingularTable: false,
 		},
-		Logger: NewSQLLogger(cfg.DB),
+		Logger: NewSQLLogger(cfg),
 	})
 	if err != nil {
 		return nil, err

@@ -112,6 +112,7 @@ func legacyPermissionCandidates(method string, fullPath string) []string {
 	method = strings.ToUpper(method)
 	exact := map[string]string{
 		"GET /api/admin/profile":                   "/admin/index/main",
+		"GET /api/admin/request-logs/:request_id":  "/admin/index/main",
 		"PUT /api/admin/profile":                   "",
 		"PUT /api/admin/password":                  "",
 		"POST /api/admin/auth/logout":              "",

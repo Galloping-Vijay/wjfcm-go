@@ -11,6 +11,7 @@ import (
 	"wjfcm-go/internal/config"
 	"wjfcm-go/internal/handler"
 	"wjfcm-go/internal/middleware"
+	"wjfcm-go/internal/requestlog"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -54,10 +55,13 @@ func New(cfg config.Config, db *gorm.DB) *gin.Engine {
 		AllowOrigins:     cfg.CORS.AllowOrigins,
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
+		ExposeHeaders:    []string{"Content-Length", requestlog.HeaderName},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
+	requestLogStore := requestlog.NewStore(cfg.Log)
+	requestlog.SetDefault(requestLogStore)
+	r.Use(requestlog.Middleware(requestLogStore))
 	r.Use(installGuard(db))
 
 	auth := handler.NewAuthHandler(cfg, db)
@@ -76,6 +80,7 @@ func New(cfg config.Config, db *gorm.DB) *gin.Engine {
 	wechat := handler.NewWechatHandler(cfg, db)
 	baidu := handler.NewBaiduHandler(cfg)
 	installer := handler.NewInstallHandler(cfg, db)
+	requestLogs := handler.NewRequestLogHandler()
 
 	r.Static("/uploads", cfg.Upload.PublicDir+"/"+cfg.Upload.BasePath)
 	r.Static("/images", cfg.Upload.PublicDir+"/images")
@@ -138,6 +143,7 @@ func New(cfg config.Config, db *gorm.DB) *gin.Engine {
 	admin.Use(middleware.AdminAuth(cfg))
 	admin.Use(middleware.AdminPermission(db))
 	admin.GET("/profile", auth.Profile)
+	admin.GET("/request-logs/:request_id", requestLogs.Show)
 	admin.PUT("/profile", auth.UpdateProfile)
 	admin.PUT("/password", auth.UpdatePassword)
 	admin.POST("/auth/logout", auth.Logout)

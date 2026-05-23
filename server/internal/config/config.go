@@ -41,7 +41,17 @@ type AppConfig struct {
 }
 
 type LogConfig struct {
-	Channel string
+	Channel             string
+	Path                string
+	MaxSizeBytes        int64
+	RequestEnabled      bool
+	RequestType         string
+	RequestPath         string
+	RequestOutput       string
+	RequestLevel        string
+	RequestMaxBodyBytes int
+	RequestMaxFileBytes int64
+	RequestKeepDays     int
 }
 
 type DBConfig struct {
@@ -183,7 +193,17 @@ func Load(files ...string) Config {
 			ConsoleColor: envBool("APP_CONSOLE_COLOR", true),
 		},
 		Log: LogConfig{
-			Channel: env("LOG_CHANNEL", "stack"),
+			Channel:             env("LOG_CHANNEL", "stack"),
+			Path:                env("LOG_PATH", "storage/logs"),
+			MaxSizeBytes:        int64(envInt("LOG_MAX_SIZE_MB", 50)) * 1024 * 1024,
+			RequestEnabled:      envBool("REQUEST_LOG_ENABLED", false),
+			RequestType:         env("REQUEST_LOG_TYPE", "json"),
+			RequestPath:         env("REQUEST_LOG_PATH", "storage/request-logs"),
+			RequestOutput:       env("REQUEST_LOG_OUTPUT", "file"),
+			RequestLevel:        env("REQUEST_LOG_LEVEL", "info"),
+			RequestMaxBodyBytes: envInt("REQUEST_LOG_MAX_BODY_KB", 256) * 1024,
+			RequestMaxFileBytes: int64(envInt("REQUEST_LOG_MAX_FILE_MB", 20)) * 1024 * 1024,
+			RequestKeepDays:     envInt("REQUEST_LOG_KEEP_DAYS", 14),
 		},
 		DB: DBConfig{
 			Host:            env("DB_HOST", "127.0.0.1"),

@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"wjfcm-go/internal/config"
+	"wjfcm-go/internal/requestlog"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -20,20 +21,23 @@ type SQLLogger struct {
 	logSQL        bool
 	logSlowSQL    bool
 	logErrorSQL   bool
+	requestLogSQL bool
 	slowThreshold time.Duration
 }
 
-func NewSQLLogger(cfg config.DBConfig) logger.Interface {
-	if !cfg.LogSQL && !cfg.LogSlowSQL && !cfg.LogErrorSQL {
+func NewSQLLogger(cfg config.Config) logger.Interface {
+	dbCfg := cfg.DB
+	if !dbCfg.LogSQL && !dbCfg.LogSlowSQL && !dbCfg.LogErrorSQL && !cfg.Log.RequestEnabled {
 		return logger.Default.LogMode(logger.Silent)
 	}
 
 	return SQLLogger{
-		level:         parseLogLevel(cfg.LogLevel),
-		logSQL:        cfg.LogSQL,
-		logSlowSQL:    cfg.LogSlowSQL,
-		logErrorSQL:   cfg.LogErrorSQL,
-		slowThreshold: time.Duration(cfg.SlowThresholdMS) * time.Millisecond,
+		level:         parseLogLevel(dbCfg.LogLevel),
+		logSQL:        dbCfg.LogSQL,
+		logSlowSQL:    dbCfg.LogSlowSQL,
+		logErrorSQL:   dbCfg.LogErrorSQL,
+		requestLogSQL: cfg.Log.RequestEnabled,
+		slowThreshold: time.Duration(dbCfg.SlowThresholdMS) * time.Millisecond,
 	}
 }
 
@@ -61,7 +65,7 @@ func (l SQLLogger) Error(ctx context.Context, msg string, data ...interface{}) {
 }
 
 func (l SQLLogger) Trace(ctx context.Context, begin time.Time, fc func() (string, int64), err error) {
-	if l.level <= logger.Silent {
+	if l.level <= logger.Silent && !l.requestLogSQL {
 		return
 	}
 
@@ -73,13 +77,39 @@ func (l SQLLogger) Trace(ctx context.Context, begin time.Time, fc func() (string
 		rowsText = fmt.Sprintf("%d", rows)
 	}
 
+	recordType := "sql"
+	errText := ""
+	hasError := err != nil && !errors.Is(err, gorm.ErrRecordNotFound)
+	isSlow := l.slowThreshold > 0 && elapsed > l.slowThreshold
+	if hasError {
+		recordType = "error"
+		errText = err.Error()
+	} else if isSlow {
+		recordType = "slow"
+	}
+	if l.requestLogSQL && !errors.Is(err, gorm.ErrRecordNotFound) {
+		requestlog.AddSQL(sqlRecord(recordType, source, elapsed, rowsText, sql, errText))
+	}
+
 	switch {
-	case err != nil && l.logErrorSQL && !errors.Is(err, gorm.ErrRecordNotFound):
+	case hasError && l.logErrorSQL:
 		log.Printf("[gorm] [error] [%s] [%.2fms] [rows:%s] %s | %v", source, float64(elapsed.Nanoseconds())/1e6, rowsText, sql, err)
-	case l.logSlowSQL && l.slowThreshold > 0 && elapsed > l.slowThreshold:
+	case l.logSlowSQL && isSlow:
 		log.Printf("[gorm] [slow] [%s] [%.2fms] [rows:%s] %s", source, float64(elapsed.Nanoseconds())/1e6, rowsText, sql)
 	case l.logSQL && l.level >= logger.Info:
 		log.Printf("[gorm] [sql] [%s] [%.2fms] [rows:%s] %s", source, float64(elapsed.Nanoseconds())/1e6, rowsText, sql)
+	}
+}
+
+func sqlRecord(recordType string, source string, elapsed time.Duration, rows string, sql string, errText string) requestlog.SQLRecord {
+	return requestlog.SQLRecord{
+		Type:     recordType,
+		Source:   source,
+		Elapsed:  float64(elapsed.Nanoseconds()) / 1e6,
+		Rows:     rows,
+		SQL:      sql,
+		Error:    errText,
+		CreateAt: time.Now().Format(time.RFC3339Nano),
 	}
 }
 

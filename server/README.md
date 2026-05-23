@@ -30,6 +30,8 @@ APP_KEY=
 APP_DEBUG=true
 APP_CONSOLE_COLOR=true
 LOG_CHANNEL=stack
+LOG_PATH=storage/logs
+LOG_MAX_SIZE_MB=50
 ```
 
 这些配置的作用：
@@ -39,6 +41,8 @@ LOG_CHANNEL=stack
 - `APP_DEBUG`：调试开关。控制 Gin 模式和部分调试输出，例如开发环境邮件验证码接口会返回 `debug_code`。
 - `APP_CONSOLE_COLOR`：控制 Gin 控制台日志是否使用彩色输出。
 - `LOG_CHANNEL`：服务日志输出位置，影响 Gin 请求日志、标准 `log`、GORM SQL 日志。
+- `LOG_PATH`：服务运行日志目录，仅在 `LOG_CHANNEL=single/file/daily` 时使用。
+- `LOG_MAX_SIZE_MB`：服务运行日志单文件最大大小，超过后自动分割。
 
 `LOG_CHANNEL` 支持：
 
@@ -49,6 +53,27 @@ single/file           写入 storage/logs/wjfcm-go.log
 daily                 写入 storage/logs/wjfcm-go-YYYY-MM-DD.log
 null/discard/none     丢弃日志
 ```
+
+请求链路日志：
+
+```env
+REQUEST_LOG_ENABLED=false
+REQUEST_LOG_TYPE=json
+REQUEST_LOG_PATH=storage/request-logs
+REQUEST_LOG_OUTPUT=file
+REQUEST_LOG_LEVEL=info
+REQUEST_LOG_MAX_BODY_KB=256
+REQUEST_LOG_MAX_FILE_MB=20
+REQUEST_LOG_KEEP_DAYS=14
+```
+
+开启后每次请求都会返回 `X-Request-ID` 响应头，JSON API 响应体也会带 `request_id`。请求参数、响应内容和该请求触发的 SQL 会写入 `REQUEST_LOG_PATH/YYYY-MM-DD/requests-YYYY-MM-DD.log`，超过 `REQUEST_LOG_MAX_FILE_MB` 后自动分割。需要查询某次请求时使用：
+
+```text
+GET /api/admin/request-logs/:request_id
+```
+
+按 `request_id` 查询日志要求 `REQUEST_LOG_OUTPUT=file` 或 `both`。
 
 新站点初始化安装：
 
