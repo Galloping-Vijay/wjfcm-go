@@ -71,6 +71,7 @@ func New(cfg config.Config, db *gorm.DB) *gin.Engine {
 	uploads := handler.NewUploadHandler(cfg)
 	seoPages := handler.NewSEOPageHandler(db)
 	wechat := handler.NewWechatHandler(cfg, db)
+	baidu := handler.NewBaiduHandler(cfg)
 
 	r.Static("/uploads", cfg.Upload.PublicDir+"/"+cfg.Upload.BasePath)
 	r.Static("/images", cfg.Upload.PublicDir+"/images")
@@ -90,6 +91,7 @@ func New(cfg config.Config, db *gorm.DB) *gin.Engine {
 	r.GET("/robots.txt", seoPages.Robots)
 	r.GET("/sitemap.xml", seoPages.Sitemap)
 	r.GET("/tools/linkSubmit", content.SubmitBaiduLinks)
+	r.Any("/baidu/serve", baidu.Serve)
 	r.GET("/wechat", wechat.Verify)
 	r.POST("/wechat", wechat.Serve)
 	api := r.Group("/api")

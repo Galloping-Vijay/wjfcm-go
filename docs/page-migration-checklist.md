@@ -69,7 +69,7 @@
 | --- | --- | --- | --- |
 | 百度主动推送 `/tools/linkSubmit` | `GET /tools/linkSubmit`、`POST /api/admin/tools/baidu-submit` | done | 已按旧逻辑提交首页、登录注册、有些话、文章、分类、标签 URL |
 | 调试接口 `/tools/tuling`、后台 `/admin/test/*` | - | done | 旧版调试入口，不迁移到生产新版 |
-| 百家号回调 `/baidu/serve` | - | partial | 旧版为百家号加密回调调试入口，需要真实回调参数和 AES Key 后再联调 |
+| 百家号回调 `/baidu/serve` | `ANY /baidu/serve` | done | 已按旧逻辑校验签名并解密 `encrypt`，上线需用真实回调参数和 AES Key 联调 |
 | 百家号文章发布 `/admin/baijiahao/article/publish` | `POST /api/admin/articles/:id/baijiahao` | done | 已支持文章列表一键发布 |
 | 文章批量替换 `/admin/article/replace` | `POST /api/admin/articles/replace`、文章列表“批量替换” | done | 支持替换标题、简介、Markdown、HTML 正文，包含回收站文章，并兼容旧正文 HTML 转义内容 |
 | 评论批量替换 `/admin/comment/replace` | `POST /api/admin/comments/replace`、评论列表“批量替换” | done | 支持查找/替换评论内容，包含回收站评论 |

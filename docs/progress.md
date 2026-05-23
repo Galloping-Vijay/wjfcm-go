@@ -127,6 +127,8 @@
   - 当前迁移上下文已固化到 `docs/migration.md` 和 `docs/standalone-context.md`。
   - `wjfcm-go/public` 已清理旧 Laravel/Layui 构建产物，仅保留根验证文件、`images/` 和 `uploads/`。
   - 旧版 `/blank` 错误页已补 Gin 模板兼容入口。
+  - 旧版百家号加密回调 `/baidu/serve` 已补 Gin 兼容入口，支持签名校验和 AES 解密输出。
+  - 前台公共头部和文章评论区已同步登录态，登录后显示用户信息并隐藏评论区登录按钮。
 
 ### 已验证
 
@@ -146,4 +148,4 @@
 2. 前台登录注册补图形验证码、邮箱验证码、忘记密码，并接入邮件配置。
 3. 第三方 OAuth 已补 GitHub、QQ、微博的跳转、回调、用户创建/登录流程；上线前填写真实 Client 配置。
 4. 继续做线上联调：OAuth 平台回调、微信公众号服务器 URL、邮件验证码真实 SMTP、百家号/百度提交。
-5. 百家号加密回调 `/baidu/serve` 需要真实回调参数和 AES Key 后再联调；旧调试入口 `/tools/tuling`、`/admin/test/*` 不迁移到生产新版。
+5. 百家号加密回调 `/baidu/serve` 已补代码，需要真实回调参数和 AES Key 做线上联调；旧调试入口 `/tools/tuling`、`/admin/test/*` 不迁移到生产新版。
