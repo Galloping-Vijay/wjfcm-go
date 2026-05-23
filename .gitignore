@@ -27,3 +27,5 @@ public/uploads/*
 Thumbs.db
 .idea/
 .vscode/
+.history/
+.claude/
