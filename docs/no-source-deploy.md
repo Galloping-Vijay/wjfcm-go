@@ -50,6 +50,7 @@ docs/
 ```bash
 cd server
 go mod tidy
+# go build -o wjfcm-go-api ./cmd/api
 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o ../release/server/wjfcm-go-api ./cmd/api
 ```
 
@@ -209,7 +210,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/www/wwwroot/wjfcm-go/server
-ExecStart=/www/wwwroot/wjfcm-go/server/wjfcm-go-api
+ExecStart=/www/wwwroot/wjfcm-go/server/wjfcm-go-api -f /www/wwwroot/wjfcm-go/server/.env
 Restart=always
 RestartSec=3
 User=www

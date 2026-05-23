@@ -35,6 +35,12 @@ go mod tidy
 go run ./cmd/api
 ```
 
+也可以指定配置文件启动：
+
+```bash
+go run ./cmd/api -f .env.local
+```
+
 常用地址：
 
 ```text
@@ -142,7 +148,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/www/wwwroot/wjfcm-go/server
-ExecStart=/www/wwwroot/wjfcm-go/server/wjfcm-go-api
+ExecStart=/www/wwwroot/wjfcm-go/server/wjfcm-go-api -f /www/wwwroot/wjfcm-go/server/.env
 Restart=always
 RestartSec=3
 User=www

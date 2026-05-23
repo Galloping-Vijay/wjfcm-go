@@ -9,6 +9,13 @@ go mod tidy
 go run ./cmd/api
 ```
 
+指定配置文件启动：
+
+```bash
+go run ./cmd/api -f .env.local
+go run ./cmd/api -f /www/wwwroot/wjfcm-go/server/.env.prod
+```
+
 默认监听：
 
 ```text
@@ -111,7 +118,7 @@ WEIBO_REDIRECT=http://localhost:8080/api/home/auth/weibo/callback
 
 ## 说明
 
-- 默认读取当前目录 `.env`，也会尝试读取仓库根目录 `.env`。
+- 默认读取当前目录 `.env`，也会尝试读取上级目录 `.env`。传入 `-f` 后只读取指定配置文件。
 - 数据库表前缀使用 `DB_PREFIX`，用于兼容现有 `wjf_` 数据表。
 - 管理员登录接口兼容 bcrypt 密码。
 - 角色权限绑定复用旧 Spatie 权限表：`roles`、`permissions`、`role_has_permissions`。

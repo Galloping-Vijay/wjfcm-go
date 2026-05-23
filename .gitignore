@@ -12,6 +12,7 @@ web/.env
 server/tmp/
 server/bin/
 server/*.exe
+server/wjfcm-go-api
 server/*.log
 *.test
 coverage.out

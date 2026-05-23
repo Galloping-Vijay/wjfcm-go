@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 
 	"wjfcm-go/internal/config"
@@ -9,7 +10,13 @@ import (
 )
 
 func main() {
+	envFile := flag.String("f", "", "env file path, default .env")
+	flag.Parse()
+
 	cfg := config.Load()
+	if *envFile != "" {
+		cfg = config.Load(*envFile)
+	}
 
 	db, err := database.Open(cfg)
 	if err != nil {

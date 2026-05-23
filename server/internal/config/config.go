@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -159,11 +160,8 @@ type OAuthProviderConfig struct {
 	RedirectURI  string
 }
 
-func Load() Config {
-	_ = godotenv.Load()
-	_ = godotenv.Load("../../.env")
-	_ = godotenv.Load("../.env")
-	_ = godotenv.Load(".env")
+func Load(files ...string) Config {
+	loadEnv(files...)
 
 	return Config{
 		App: AppConfig{
@@ -285,6 +283,23 @@ func Load() Config {
 			},
 		},
 	}
+}
+
+func loadEnv(files ...string) {
+	customFiles := make([]string, 0, len(files))
+	for _, file := range files {
+		if file = strings.TrimSpace(file); file != "" {
+			customFiles = append(customFiles, file)
+		}
+	}
+	if len(customFiles) > 0 {
+		_ = godotenv.Load(customFiles...)
+		return
+	}
+
+	_ = godotenv.Load(".env")
+	_ = godotenv.Load(filepath.Clean("../.env"))
+	_ = godotenv.Load(filepath.Clean("../../.env"))
 }
 
 func env(key string, fallback string) string {
