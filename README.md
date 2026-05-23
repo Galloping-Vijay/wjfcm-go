@@ -76,6 +76,8 @@ VITE_API_BASE_URL=http://localhost:8080/api
 
 下面以 Linux 服务器、Nginx、systemd、MySQL 为例。前端和后端可以部署在同一台机器，也可以分开部署。
 
+如果不想把源码上传到服务器，只部署二进制、Vue 构建产物、模板、静态资源和生产配置，请看 [无源码部署说明](docs/no-source-deploy.md)。
+
 ### 1. 后端部署
 
 先准备生产环境配置：
