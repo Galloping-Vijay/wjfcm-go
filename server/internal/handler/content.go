@@ -432,7 +432,7 @@ func (h *ContentHandler) SystemConfigs(c *gin.Context) {
 func applySystemConfigGroup(query *gorm.DB, group string) *gorm.DB {
 	switch group {
 	case "basic":
-		return query.Where("`key` IN ?", []string{"site_name", "site_url", "site_logo", "site_icp", "site_tongji", "site_copyright"})
+		return query.Where("`key` IN ?", systemConfigSeedKeys(basicConfigSeeds()))
 	case "contact":
 		return query.Where("`key` IN ?", []string{"site_co_name", "address", "map_lat", "map_lng", "site_phone", "site_email", "site_qq", "site_wechat"})
 	case "seo":
@@ -458,6 +458,8 @@ type systemConfigSeed struct {
 func (h *ContentHandler) ensureSystemConfigDefaults(group string) {
 	var seeds []systemConfigSeed
 	switch group {
+	case "basic":
+		seeds = basicConfigSeeds()
 	case "wechat":
 		seeds = wechatConfigSeeds()
 	case "mini":
@@ -479,6 +481,19 @@ func (h *ContentHandler) ensureSystemConfigDefaults(group string) {
 			ConfigType: seed.ConfigType,
 			Status:     seed.Status,
 		}).Error
+	}
+}
+
+func basicConfigSeeds() []systemConfigSeed {
+	return []systemConfigSeed{
+		{Title: "网站名称", Key: "site_name", Type: "text", ConfigType: 1, Status: 1},
+		{Title: "网站地址", Key: "site_url", Type: "text", ConfigType: 1, Status: 1},
+		{Title: "网站 LOGO", Key: "site_logo", Type: "image", ConfigType: 1, Status: 1},
+		{Title: "ICP备案号", Key: "site_icp", Type: "text", ConfigType: 1, Status: 1},
+		{Title: "统计代码", Key: "site_tongji", Type: "textarea", ConfigType: 1, Status: 1},
+		{Title: "Google AdSense Client", Key: "site_google_adsense_client", Type: "text", ConfigType: 1, Status: 1},
+		{Title: "Google AdSense 完整代码", Key: "site_google_adsense_html", Type: "textarea", ConfigType: 1, Status: 1},
+		{Title: "版权信息", Key: "site_copyright", Type: "textarea", ConfigType: 1, Status: 1},
 	}
 }
 

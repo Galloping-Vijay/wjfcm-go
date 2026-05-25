@@ -650,3 +650,18 @@ func requestOriginFromCanonical(canonical string) string {
 func SafeHTML(value string) template.HTML {
 	return template.HTML(html.UnescapeString(value))
 }
+
+func ScriptHTML(value string) template.HTML {
+	value = strings.TrimSpace(html.UnescapeString(value))
+	if value == "" {
+		return ""
+	}
+	if unquoted, err := strconv.Unquote(value); err == nil {
+		value = strings.TrimSpace(html.UnescapeString(unquoted))
+	}
+	lower := strings.ToLower(value)
+	if strings.Contains(lower, "<script") || strings.Contains(lower, "<ins ") {
+		return template.HTML(value)
+	}
+	return template.HTML("<script>" + value + "</script>")
+}

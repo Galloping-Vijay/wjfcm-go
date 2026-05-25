@@ -32,7 +32,8 @@ func New(cfg config.Config, db *gorm.DB) *gin.Engine {
 
 	r := gin.Default()
 	r.SetFuncMap(template.FuncMap{
-		"safeHTML": handler.SafeHTML,
+		"safeHTML":   handler.SafeHTML,
+		"scriptHTML": handler.ScriptHTML,
 		"splitTags": func(value string) []string {
 			parts := strings.Split(value, ",")
 			tags := make([]string, 0, len(parts))

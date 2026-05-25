@@ -360,6 +360,9 @@ func seedInstallSystemConfigs(tx *gorm.DB, cfg config.Config) error {
 		{Title: "SEO 描述", Key: "site_description", Value: "wjfcm-go CMS", Type: "textarea", ConfigType: 2, Status: 1},
 		{Title: "举报邮箱", Key: "report_email", Value: "", Type: "text", ConfigType: 1, Status: 1},
 		{Title: "ICP备案号", Key: "site_icp", Value: "", Type: "text", ConfigType: 1, Status: 1},
+		{Title: "统计代码", Key: "site_tongji", Value: "", Type: "textarea", ConfigType: 1, Status: 1},
+		{Title: "Google AdSense Client", Key: "site_google_adsense_client", Value: "", Type: "text", ConfigType: 1, Status: 1},
+		{Title: "Google AdSense 完整代码", Key: "site_google_adsense_html", Value: "", Type: "textarea", ConfigType: 1, Status: 1},
 		{Title: "微信号", Key: "site_wechat", Value: "", Type: "text", ConfigType: 1, Status: 1},
 		{Title: "公众号二维码", Key: "site_wechat_public", Value: "/images/config/wx_public.jpg", Type: "image", ConfigType: 1, Status: 1},
 	}
