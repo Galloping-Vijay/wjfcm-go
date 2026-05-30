@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"wjfcm-go/internal/config"
+	"wjfcms-go/internal/config"
 )
 
 func SendMail(cfg config.MailConfig, subject string, body string) error {

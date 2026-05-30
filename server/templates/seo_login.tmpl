@@ -1,4 +1,4 @@
-﻿{{ template "seo_layout_start" . }}
+{{ template "seo_layout_start" . }}
 <section class="auth-card">
   <h1>欢迎登录</h1>
   <form id="login-form" class="auth-form">
@@ -19,14 +19,14 @@
 (function(){
   var form=document.getElementById('login-form'),msg=document.getElementById('form-message');
   var redirect=new URLSearchParams(location.search).get('redirect')||'/user';
-  window.WJFCMGOAuth.loadCaptcha(form);
+  window.WJFCMSGOAuth.loadCaptcha(form);
   form.addEventListener('submit',function(e){
     e.preventDefault();msg.textContent='';
-    window.WJFCMGOAuth.post('/api/auth/login',window.WJFCMGOAuth.formJSON(form)).then(function(body){
+    window.WJFCMSGOAuth.post('/api/auth/login',window.WJFCMSGOAuth.formJSON(form)).then(function(body){
       localStorage.setItem('home_token',body.data.token);
       localStorage.setItem('home_user',JSON.stringify(body.data.user));
       location.href=redirect;
-    }).catch(function(err){msg.textContent=err.message;window.WJFCMGOAuth.loadCaptcha(form);});
+    }).catch(function(err){msg.textContent=err.message;window.WJFCMSGOAuth.loadCaptcha(form);});
   });
 })();
 </script>

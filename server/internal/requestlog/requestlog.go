@@ -17,7 +17,7 @@ import (
 	"sync"
 	"time"
 
-	"wjfcm-go/internal/config"
+	"wjfcms-go/internal/config"
 
 	"github.com/gin-gonic/gin"
 )

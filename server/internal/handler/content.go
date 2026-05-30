@@ -12,10 +12,10 @@ import (
 	"strings"
 	"time"
 
-	"wjfcm-go/internal/config"
-	"wjfcm-go/internal/model"
-	"wjfcm-go/internal/response"
-	"wjfcm-go/internal/service"
+	"wjfcms-go/internal/config"
+	"wjfcms-go/internal/model"
+	"wjfcms-go/internal/response"
+	"wjfcms-go/internal/service"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

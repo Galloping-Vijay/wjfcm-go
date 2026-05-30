@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	"wjfcm-go/internal/config"
-	"wjfcm-go/internal/model"
+	"wjfcms-go/internal/config"
+	"wjfcms-go/internal/model"
 
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"

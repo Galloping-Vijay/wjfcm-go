@@ -3,7 +3,7 @@
 ## 开发启动
 
 ```bash
-cd wjfcm-go/server
+cd wjfcms-go/server
 copy .env.example .env
 go mod tidy
 go run ./cmd/api
@@ -13,7 +13,7 @@ go run ./cmd/api
 
 ```bash
 go run ./cmd/api -f .env.local
-go run ./cmd/api -f /www/wwwroot/wjfcm-go/server/.env.prod
+go run ./cmd/api -f /www/wwwroot/wjfcms-go/server/.env.prod
 ```
 
 默认监听：
@@ -49,8 +49,8 @@ LOG_MAX_SIZE_MB=50
 ```text
 stack/stdout/console  输出到控制台
 stderr                输出到标准错误
-single/file           写入 storage/logs/wjfcm-go.log
-daily                 写入 storage/logs/wjfcm-go-YYYY-MM-DD.log
+single/file           写入 storage/logs/wjfcms-go.log
+daily                 写入 storage/logs/wjfcms-go-YYYY-MM-DD.log
 null/discard/none     丢弃日志
 ```
 

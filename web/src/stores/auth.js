@@ -1,34 +1,22 @@
 import { defineStore } from 'pinia'
 import { getAdminProfile, loginAdmin, logoutAdmin, updateAdminPassword, updateAdminProfile } from '../api/auth'
 
-const legacyTokenKey = 'wjfcms_admin_token'
-const legacyRefreshTokenKey = 'wjfcms_admin_refresh_token'
-const legacyAdminKey = 'wjfcms_admin'
-const legacyPermissionKey = 'wjfcms_admin_permissions'
+const tokenKey = 'wjfcms_go_admin_token'
+const refreshTokenKey = 'wjfcms_go_admin_refresh_token'
+const adminKey = 'wjfcms_go_admin'
+const permissionKey = 'wjfcms_go_admin_permissions'
 
-const tokenKey = 'wjfcm_go_admin_token'
-const refreshTokenKey = 'wjfcm_go_admin_refresh_token'
-const adminKey = 'wjfcm_go_admin'
-const permissionKey = 'wjfcm_go_admin_permissions'
-
-function takeStorageValue(key, legacyKey, fallback = '') {
+function takeStorageValue(key, fallback = '') {
   const current = localStorage.getItem(key)
-  if (current !== null) return current
-  const legacy = localStorage.getItem(legacyKey)
-  if (legacy !== null) {
-    localStorage.setItem(key, legacy)
-    localStorage.removeItem(legacyKey)
-    return legacy
-  }
-  return fallback
+  return current !== null ? current : fallback
 }
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    token: takeStorageValue(tokenKey, legacyTokenKey),
-    refreshToken: takeStorageValue(refreshTokenKey, legacyRefreshTokenKey),
-    admin: JSON.parse(takeStorageValue(adminKey, legacyAdminKey, 'null')),
-    permissions: JSON.parse(takeStorageValue(permissionKey, legacyPermissionKey, '[]'))
+    token: takeStorageValue(tokenKey),
+    refreshToken: takeStorageValue(refreshTokenKey),
+    admin: JSON.parse(takeStorageValue(adminKey, 'null')),
+    permissions: JSON.parse(takeStorageValue(permissionKey, '[]'))
   }),
   actions: {
     persistSession(token, refreshToken, admin, permissions = []) {

@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"wjfcm-go/internal/config"
-	"wjfcm-go/internal/response"
+	"wjfcms-go/internal/config"
+	"wjfcms-go/internal/response"
 
 	"github.com/gin-gonic/gin"
 )

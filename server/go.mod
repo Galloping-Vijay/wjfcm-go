@@ -1,4 +1,4 @@
-module wjfcm-go
+module wjfcms-go
 
 go 1.24
 

@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"wjfcm-go/internal/model"
+	"wjfcms-go/internal/model"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -57,6 +57,7 @@ type seoPageData struct {
 	Archive          []seoArchiveGroup
 	Chats            []model.Chat
 	Article          *model.Article
+	ArticleTags      []model.Tag
 	PrevArticle      *model.Article
 	NextArticle      *model.Article
 	Category         *model.Category
@@ -338,6 +339,8 @@ func (h *SEOPageHandler) Article(c *gin.Context) {
 		c.String(http.StatusNotFound, "文章不存在")
 		return
 	}
+	h.db.Model(&article).UpdateColumn("click", gorm.Expr("click + ?", 1))
+	article.Click++
 	path := "/article/" + c.Param("id")
 	data := h.baseData(c)
 	data.Title = article.Title + " | " + h.configValue(data.Configs, "seo_title", data.SiteName)
@@ -347,11 +350,24 @@ func (h *SEOPageHandler) Article(c *gin.Context) {
 	data.OGType = "article"
 	data.OGImage = absoluteAssetURL(c, firstNonEmpty(article.Cover, "/images/config/avatar.jpg"))
 	data.Article = &article
+	data.ArticleTags = h.articleTags(article.Keywords)
 	data.PrevArticle = h.neighborArticle(article.ID, "prev")
 	data.NextArticle = h.neighborArticle(article.ID, "next")
 	data.ActiveCategoryID = article.CategoryID
 	data.JSONLD = template.JS(h.articleJSONLD(data, article, path))
 	c.HTML(http.StatusOK, "seo_article.tmpl", data)
+}
+
+func (h *SEOPageHandler) articleTags(keywords string) []model.Tag {
+	names := splitKeywordNames(keywords)
+	if len(names) == 0 {
+		return nil
+	}
+	var tags []model.Tag
+	if err := h.db.Where("name IN ?", names).Select("id", "name").Find(&tags).Error; err != nil {
+		return nil
+	}
+	return tags
 }
 
 func (h *SEOPageHandler) neighborArticle(id uint64, direction string) *model.Article {
@@ -577,6 +593,21 @@ func highlightArticles(items []seoArticleItem, keyword string) []seoArticleItem 
 		items[i].DescriptionHTML = highlightText(items[i].Description, keyword)
 	}
 	return items
+}
+
+func splitKeywordNames(value string) []string {
+	parts := strings.Split(value, ",")
+	names := make([]string, 0, len(parts))
+	seen := make(map[string]bool, len(parts))
+	for _, part := range parts {
+		name := strings.TrimSpace(part)
+		if name == "" || seen[name] {
+			continue
+		}
+		seen[name] = true
+		names = append(names, name)
+	}
+	return names
 }
 
 func highlightText(value string, keyword string) template.HTML {

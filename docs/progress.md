@@ -1,10 +1,10 @@
-# wjfcm-go 开发进度
+# wjfcms-go 开发进度
 
 ## 2026-05-21
 
 ### 已完成
 
-- 建立新版工作区 `wjfcm-go/`。
+- 建立新版工作区 `wjfcms-go/`。
 - 建立 Gin 后端基础骨架。
 - 建立 Vue 3 + Vite 前端基础骨架。
 - Gin 后端已接入：
@@ -121,11 +121,11 @@
   - 旧版百度站长主动推送已迁移：兼容 `/tools/linkSubmit`，并新增后台认证接口 `POST /api/admin/tools/baidu-submit`。
   - 后台评论批量替换已补回：评论列表新增“批量替换”，后端支持 `POST /api/admin/comments/replace`。
   - 后台文章批量替换已补回：文章列表新增“批量替换”，后端支持 `POST /api/admin/articles/replace`，可选择替换标题、简介、Markdown、HTML 正文。
-  - 项目目录已统一为 `wjfcm-go/`，旧临时目录 `gin-vue/` 已删除。
-  - `public/` 已迁入 `wjfcm-go/public`，`PUBLIC_DIR` 改为独立项目默认的 `../public`。
-  - Gin 已支持 `wjfcm-go/public` 下根目录文件直出，例如 `/ads.txt`、`/bdunion.txt`、`/google*.html`，且不影响 `/article/:id`、`/category/:id` 等动态路由。
+  - 项目目录已统一为 `wjfcms-go/`，旧临时目录 `gin-vue/` 已删除。
+  - `public/` 已迁入 `wjfcms-go/public`，`PUBLIC_DIR` 改为独立项目默认的 `../public`。
+  - Gin 已支持 `wjfcms-go/public` 下根目录文件直出，例如 `/ads.txt`、`/bdunion.txt`、`/google*.html`，且不影响 `/article/:id`、`/category/:id` 等动态路由。
   - 当前迁移上下文已固化到 `docs/migration.md` 和 `docs/standalone-context.md`。
-  - `wjfcm-go/public` 已清理旧 Laravel/Layui 构建产物，仅保留根验证文件、`images/` 和 `uploads/`。
+  - `wjfcms-go/public` 已清理旧 Laravel/Layui 构建产物，仅保留根验证文件、`images/` 和 `uploads/`。
   - 旧版 `/blank` 错误页已补 Gin 模板兼容入口。
   - 旧版百家号加密回调 `/baidu/serve` 已补 Gin 兼容入口，支持签名校验和 AES 解密输出。
   - 前台公共头部和文章评论区已同步登录态，登录后显示用户信息并隐藏评论区登录按钮。
@@ -133,14 +133,14 @@
 
 ### 已验证
 
-- `wjfcm-go/server` 已执行 `go mod tidy`。
-- `wjfcm-go/server` 已执行 `go test ./...`，所有 Go 包通过编译检查。
-- `wjfcm-go/server` 临时启动 `APP_PORT=18080`，已检查首页、文章详情、搜索页、有些话页面均返回 200，并确认置顶区、代码复制、表情、回复上下文、搜索高亮模板标记存在。
+- `wjfcms-go/server` 已执行 `go mod tidy`。
+- `wjfcms-go/server` 已执行 `go test ./...`，所有 Go 包通过编译检查。
+- `wjfcms-go/server` 临时启动 `APP_PORT=18080`，已检查首页、文章详情、搜索页、有些话页面均返回 200，并确认置顶区、代码复制、表情、回复上下文、搜索高亮模板标记存在。
 
 ### 当前限制
 
 - 第三方 OAuth 代码已完成，仍需要在 GitHub、QQ、微博平台申请真实应用，并把回调地址写入 `.env` 后才能线上验证。
-- `wjfcm-go/web` 已执行 `npm run build`，生产构建通过。
+- `wjfcms-go/web` 已执行 `npm run build`，生产构建通过。
 - 已用文件哈希核对确认旧临时目录与正式目录内容一致后删除 `gin-vue/`。
 
 ### 下一步

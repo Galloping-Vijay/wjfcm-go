@@ -5,7 +5,7 @@
         <div class="login-brand">
           <span class="brand-mark">W</span>
           <div>
-            <strong>wjfcm-go</strong>
+            <strong>wjfcms-go</strong>
             <p>内容管理控制台</p>
           </div>
         </div>

@@ -15,8 +15,8 @@ import (
 	"strings"
 	"time"
 
-	"wjfcm-go/internal/config"
-	"wjfcm-go/internal/model"
+	"wjfcms-go/internal/config"
+	"wjfcms-go/internal/model"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -202,7 +202,7 @@ func (h *WechatHandler) tulingReply(input string, reqType int) string {
 		"perception": perception,
 		"userInfo": map[string]string{
 			"apiKey": apiKey,
-			"userId": "wjfcm-go-wechat",
+			"userId": "wjfcms-go-wechat",
 		},
 	}
 	body, err := json.Marshal(payload)

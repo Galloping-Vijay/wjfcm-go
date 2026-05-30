@@ -1,4 +1,4 @@
-﻿{{ define "seo_layout_start" -}}
+{{ define "seo_layout_start" -}}
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -57,7 +57,7 @@
     .article-neighbors{display:grid;gap:10px;margin-top:18px}.article-neighbors div{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px;align-items:center;border:1px solid #e5e7eb;border-radius:8px;background:#f8fafc;padding:10px 12px}.article-neighbors span{color:#6b7280;font-size:13px}.article-neighbors a{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#0f766e;font-weight:700}.article-neighbors em{color:#9ca3af;font-style:normal}@media(max-width:640px){.article-neighbors div{grid-template-columns:1fr;gap:3px}.article-neighbors a{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}}
   </style>
   <script>
-    window.WJFCMGOAuth={
+    window.WJFCMSGOAuth={
       token:function(){return localStorage.getItem('home_token')||'';},
       user:function(){try{return JSON.parse(localStorage.getItem('home_user')||'null')||null;}catch(e){return null;}},
       clear:function(){localStorage.removeItem('home_token');localStorage.removeItem('home_user');this.renderAuthState();},
@@ -71,10 +71,10 @@
     };
     function escapeHTML(value){return String(value||'').replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];});}
     function escapeAttr(value){return escapeHTML(value).replace(/`/g,'&#96;');}
-    window.WJFCMSAuth=window.WJFCMGOAuth;
-    document.addEventListener('click',function(event){var btn=event.target.closest('[data-refresh-captcha]');if(btn){var form=btn.closest('form');if(form)window.WJFCMGOAuth.loadCaptcha(form);}});
-    document.addEventListener('click',function(event){if(event.target.closest('[data-home-logout]')){window.WJFCMGOAuth.clear();if(location.pathname==='/user')location.href='/';}});
-    document.addEventListener('DOMContentLoaded',function(){window.WJFCMGOAuth.renderAuthState();});
+    window.WJFCMSAuth=window.WJFCMSGOAuth;
+    document.addEventListener('click',function(event){var btn=event.target.closest('[data-refresh-captcha]');if(btn){var form=btn.closest('form');if(form)window.WJFCMSGOAuth.loadCaptcha(form);}});
+    document.addEventListener('click',function(event){if(event.target.closest('[data-home-logout]')){window.WJFCMSGOAuth.clear();if(location.pathname==='/user')location.href='/';}});
+    document.addEventListener('DOMContentLoaded',function(){window.WJFCMSGOAuth.renderAuthState();});
   </script>
 </head>
 <body>
@@ -159,7 +159,7 @@
       e.preventDefault();
       var msg=document.getElementById('friend-link-message');
       msg.textContent='';
-      window.WJFCMGOAuth.post('/api/home/friend-links',window.WJFCMGOAuth.formJSON(friendForm)).then(function(body){
+      window.WJFCMSGOAuth.post('/api/home/friend-links',window.WJFCMSGOAuth.formJSON(friendForm)).then(function(body){
         msg.textContent=body.msg||'申请已提交，请等待审核';
         friendForm.reset();
       }).catch(function(err){msg.textContent=err.message;});

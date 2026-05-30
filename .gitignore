@@ -13,7 +13,7 @@ web/.env.production
 server/tmp/
 server/bin/
 server/*.exe
-server/wjfcm-go-api
+server/wjfcms-go-api
 server/*.log
 server/storage/
 *.test

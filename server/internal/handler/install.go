@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	"wjfcm-go/internal/config"
-	"wjfcm-go/internal/database"
-	"wjfcm-go/internal/model"
+	"wjfcms-go/internal/config"
+	"wjfcms-go/internal/database"
+	"wjfcms-go/internal/model"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -142,7 +142,7 @@ func (h *InstallHandler) Store(c *gin.Context) {
 	}
 
 	data := h.pageData("")
-	data.Success = "安装完成，请重启 wjfcm-go 服务后访问后台登录。后台地址：/admin/login"
+	data.Success = "安装完成，请重启 wjfcms-go 服务后访问后台登录。后台地址：/admin/login"
 	data.Installed = true
 	c.HTML(http.StatusOK, "seo_install.tmpl", data)
 }
@@ -153,13 +153,13 @@ func (h *InstallHandler) installed() bool {
 
 func (h *InstallHandler) pageData(message string) installPageData {
 	data := installPageData{
-		Title:     "安装 wjfcm-go",
-		SiteName:  "wjfcm-go",
+		Title:     "安装 wjfcms-go",
+		SiteName:  "wjfcms-go",
 		Year:      time.Now().Year(),
 		Installed: h.installed(),
 		Error:     message,
 		Form: installRequest{
-			AppName:        firstNonEmpty(h.cfg.App.Name, "wjfcm-go"),
+			AppName:        firstNonEmpty(h.cfg.App.Name, "wjfcms-go"),
 			AppURL:         firstNonEmpty(h.cfg.App.URL, "http://localhost:8080"),
 			AppPort:        firstNonEmpty(h.cfg.App.Port, "8080"),
 			DBHost:         firstNonEmpty(h.cfg.DB.Host, "127.0.0.1"),
@@ -356,8 +356,8 @@ func seedInstallSystemConfigs(tx *gorm.DB, cfg config.Config) error {
 		{Title: "网站 LOGO", Key: "site_logo", Value: "/images/config/logo.png", Type: "image", ConfigType: 1, Status: 1},
 		{Title: "默认头像", Key: "site_avatar", Value: "/images/config/avatar.jpg", Type: "image", ConfigType: 1, Status: 1},
 		{Title: "SEO 标题", Key: "site_seo_title", Value: cfg.App.Name, Type: "text", ConfigType: 2, Status: 1},
-		{Title: "SEO 关键词", Key: "site_keywords", Value: "wjfcm-go,CMS,Gin,Vue", Type: "text", ConfigType: 2, Status: 1},
-		{Title: "SEO 描述", Key: "site_description", Value: "wjfcm-go CMS", Type: "textarea", ConfigType: 2, Status: 1},
+		{Title: "SEO 关键词", Key: "site_keywords", Value: "wjfcms-go,CMS,Gin,Vue", Type: "text", ConfigType: 2, Status: 1},
+		{Title: "SEO 描述", Key: "site_description", Value: "wjfcms-go CMS", Type: "textarea", ConfigType: 2, Status: 1},
 		{Title: "举报邮箱", Key: "report_email", Value: "", Type: "text", ConfigType: 1, Status: 1},
 		{Title: "ICP备案号", Key: "site_icp", Value: "", Type: "text", ConfigType: 1, Status: 1},
 		{Title: "百度站长验证", Key: "baidu_site_verification", Value: "9jxVRatXIs", Type: "text", ConfigType: 1, Status: 1},

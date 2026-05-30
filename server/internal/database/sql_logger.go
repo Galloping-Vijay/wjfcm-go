@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"wjfcm-go/internal/config"
-	"wjfcm-go/internal/requestlog"
+	"wjfcms-go/internal/config"
+	"wjfcms-go/internal/requestlog"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -153,7 +153,7 @@ func isApplicationFrame(file string) bool {
 		strings.Contains(file, "runtime/") {
 		return false
 	}
-	return strings.Contains(file, "/wjfcm-go/server/") ||
+	return strings.Contains(file, "/wjfcms-go/server/") ||
 		strings.Contains(file, "/internal/handler/") ||
 		strings.Contains(file, "/internal/service/") ||
 		strings.Contains(file, "/internal/router/") ||
@@ -162,8 +162,8 @@ func isApplicationFrame(file string) bool {
 
 func normalizePath(file string) string {
 	file = strings.ReplaceAll(file, "\\", "/")
-	if index := strings.Index(file, "/wjfcm-go/server/"); index >= 0 {
-		return file[index+len("/wjfcm-go/server/"):]
+	if index := strings.Index(file, "/wjfcms-go/server/"); index >= 0 {
+		return file[index+len("/wjfcms-go/server/"):]
 	}
 	return file
 }

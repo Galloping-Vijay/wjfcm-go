@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"wjfcm-go/internal/config"
+	"wjfcms-go/internal/config"
 
 	"github.com/gin-gonic/gin"
 )
@@ -36,9 +36,9 @@ func logWriter(cfg config.LogConfig) (io.Writer, func() error, error) {
 	case "stderr":
 		return os.Stderr, func() error { return nil }, nil
 	case "single", "file":
-		return openLogFile(filepath.Join(logPath(cfg), "wjfcm-go.log"), cfg.MaxSizeBytes)
+		return openLogFile(filepath.Join(logPath(cfg), "wjfcms-go.log"), cfg.MaxSizeBytes)
 	case "daily":
-		name := "wjfcm-go-" + time.Now().Format("2006-01-02") + ".log"
+		name := "wjfcms-go-" + time.Now().Format("2006-01-02") + ".log"
 		return openLogFile(filepath.Join(logPath(cfg), name), cfg.MaxSizeBytes)
 	case "null", "discard", "none":
 		return io.Discard, func() error { return nil }, nil

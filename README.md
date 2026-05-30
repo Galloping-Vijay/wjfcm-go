@@ -1,11 +1,11 @@
-# wjfcm-go
+# wjfcms-go
 
-wjfcm-go 是一个基于 Gin + Vue 的 CMS 项目。前台公开页面由 Gin 服务端渲染，后台管理端由 Vue 提供。
+wjfcms-go 是一个基于 Gin + Vue 的 CMS 项目。前台公开页面由 Gin 服务端渲染，后台管理端由 Vue 提供。
 
 ## 目录规划
 
 ```text
-wjfcm-go/
+wjfcms-go/
   server/       Gin 后端服务
   web/          Vue 前端项目
   public/       公开静态资源、上传文件、根目录验证文件
@@ -29,7 +29,7 @@ wjfcm-go/
 前台公开页面和 API 都由 Gin 服务提供。开发时启动这个服务后，直接访问 `http://localhost:8080/` 查看前台 SEO 页面。
 
 ```bash
-cd wjfcm-go/server
+cd wjfcms-go/server
 copy .env.example .env
 go mod tidy
 go run ./cmd/api
@@ -62,7 +62,7 @@ API 健康检查: http://localhost:8080/api/health
 后台管理由 Vue + Vite 提供。开发时单独启动 Vue，只访问后台页面。
 
 ```bash
-cd wjfcm-go/web
+cd wjfcms-go/web
 copy .env.example .env
 npm install
 npm run dev
@@ -93,7 +93,7 @@ VITE_API_BASE_URL=http://localhost:8080/api
 如果是已有站点或手工部署，先准备生产环境配置：
 
 ```bash
-cd wjfcm-go/server
+cd wjfcms-go/server
 cp .env.example .env
 ```
 
@@ -128,7 +128,7 @@ DB_PASSWORD=你的密码
 DB_PREFIX=wjf_
 
 CORS_ALLOW_ORIGINS=https://www.example.com,https://example.com
-PUBLIC_DIR=/www/wwwroot/wjfcm-go/public
+PUBLIC_DIR=/www/wwwroot/wjfcms-go/public
 UPLOAD_BASE_PATH=uploads
 
 GITHUB_CLIENT_ID=
@@ -145,22 +145,22 @@ WEIBO_REDIRECT=https://www.example.com/api/auth/weibo/callback
 编译 Gin 服务：
 
 ```bash
-cd wjfcm-go/server
+cd wjfcms-go/server
 go mod tidy
-go build -o wjfcm-go-api ./cmd/api
+go build -o wjfcms-go-api ./cmd/api
 ```
 
 推荐用 systemd 托管后端进程：
 
 ```ini
 [Unit]
-Description=wjfcm-go API
+Description=wjfcms-go API
 After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/www/wwwroot/wjfcm-go/server
-ExecStart=/www/wwwroot/wjfcm-go/server/wjfcm-go-api -f /www/wwwroot/wjfcm-go/server/.env
+WorkingDirectory=/www/wwwroot/wjfcms-go/server
+ExecStart=/www/wwwroot/wjfcms-go/server/wjfcms-go-api -f /www/wwwroot/wjfcms-go/server/.env
 Restart=always
 RestartSec=3
 User=www
@@ -171,13 +171,13 @@ Environment=GIN_MODE=release
 WantedBy=multi-user.target
 ```
 
-保存为 `/etc/systemd/system/wjfcm-go-api.service` 后启动：
+保存为 `/etc/systemd/system/wjfcms-go-api.service` 后启动：
 
 ```bash
 systemctl daemon-reload
-systemctl enable wjfcm-go-api
-systemctl start wjfcm-go-api
-systemctl status wjfcm-go-api
+systemctl enable wjfcms-go-api
+systemctl start wjfcms-go-api
+systemctl status wjfcms-go-api
 ```
 
 ### 2. Vue 后台部署
@@ -187,7 +187,7 @@ Vue 生产环境现在只服务后台，不再负责任何前台页面。
 生产环境需要把接口地址指向线上 Gin API：
 
 ```bash
-cd wjfcm-go/web
+cd wjfcms-go/web
 cp .env.example .env.production
 ```
 
@@ -200,7 +200,7 @@ VITE_API_BASE_URL=https://api.example.com/api
 构建 Vue 静态文件：
 
 ```bash
-cd wjfcm-go/web
+cd wjfcms-go/web
 npm install
 npm run build
 ```
@@ -208,7 +208,7 @@ npm run build
 构建产物在：
 
 ```text
-wjfcm-go/web/dist/
+wjfcms-go/web/dist/
 ```
 
 当前推荐部署方式是“Gin 承接前台 SEO 页面 + Vue 承接后台页面”：
@@ -228,7 +228,7 @@ wjfcm-go/web/dist/
 server {
     listen 80;
     server_name www.example.com;
-    root /www/wwwroot/wjfcm-go/web/dist;
+    root /www/wwwroot/wjfcms-go/web/dist;
     index index.html;
 
     location ~ ^/(api|article|category|tag|search|archive|chat|login|register|forgot-password|user|install|blank|robots\.txt|sitemap\.xml|tools|wechat|baidu)(/|$) {
@@ -248,19 +248,19 @@ server {
     }
 
     location ^~ /uploads/ {
-        alias /www/wwwroot/wjfcm-go/public/uploads/;
+        alias /www/wwwroot/wjfcms-go/public/uploads/;
         expires 30d;
         access_log off;
     }
 
     location ^~ /images/ {
-        alias /www/wwwroot/wjfcm-go/public/images/;
+        alias /www/wwwroot/wjfcms-go/public/images/;
         expires 30d;
         access_log off;
     }
 
     location ~ ^/(favicon\.ico|ads\.txt|bdunion\.txt|google.*\.html)$ {
-        root /www/wwwroot/wjfcm-go/public;
+        root /www/wwwroot/wjfcms-go/public;
         access_log off;
     }
 
@@ -325,7 +325,7 @@ VITE_API_BASE_URL=/api
 
 部署后建议检查：
 
-- `systemctl status wjfcm-go-api` 后端是否运行。
+- `systemctl status wjfcms-go-api` 后端是否运行。
 - `curl http://127.0.0.1:8080/api/home/articles` 后端接口是否正常。
 - `curl https://www.example.com/article/1` 是否能直接看到文章标题、正文、`description`、`canonical`、JSON-LD，而不是只有 Vue 空壳。
 - `curl https://www.example.com/sitemap.xml` 和 `curl https://www.example.com/robots.txt` 是否正常。
@@ -338,4 +338,4 @@ VITE_API_BASE_URL=/api
 - 数据库优先兼容现有 `wjf_` 表。
 - 前台 SEO 页面由 Gin 输出完整 HTML。
 - Vue 只负责后台管理端。
-- 前后端配置、部署脚本和文档统一使用 `wjfcm-go` 命名。
+- 前后端配置、部署脚本和文档统一使用 `wjfcms-go` 命名。

@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"wjfcm-go/internal/response"
+	"wjfcms-go/internal/response"
 
 	"github.com/gin-gonic/gin"
 )

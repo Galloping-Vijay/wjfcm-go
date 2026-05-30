@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"wjfcm-go/internal/config"
+	"wjfcms-go/internal/config"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

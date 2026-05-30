@@ -4,10 +4,10 @@ import (
 	"flag"
 	"log"
 
-	"wjfcm-go/internal/applog"
-	"wjfcm-go/internal/config"
-	"wjfcm-go/internal/database"
-	"wjfcm-go/internal/router"
+	"wjfcms-go/internal/applog"
+	"wjfcms-go/internal/config"
+	"wjfcms-go/internal/database"
+	"wjfcms-go/internal/router"
 )
 
 func main() {

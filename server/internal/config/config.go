@@ -186,7 +186,7 @@ func Load(files ...string) Config {
 
 	return Config{
 		App: AppConfig{
-			Name:         env("APP_NAME", "wjfcm-go"),
+			Name:         env("APP_NAME", "wjfcms-go"),
 			Env:          appEnv,
 			Key:          appKey,
 			Debug:        envBool("APP_DEBUG", !isProductionEnv(appEnv)),

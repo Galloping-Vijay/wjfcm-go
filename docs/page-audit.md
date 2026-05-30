@@ -10,8 +10,8 @@ http://blog.localhost/admin/login
 
 页面信息：
 
-- 标题：`登入 - wjfcm-go`
-- 主标题：`wjfcm-go`
+- 标题：`登入 - wjfcms-go`
+- 主标题：`wjfcms-go`
 - 副标题：`简单好用的后台管理系统`
 - 表单字段：
   - 账号输入框。

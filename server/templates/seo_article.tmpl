@@ -6,7 +6,11 @@
     <span>{{ .Article.CreatedAt.Format "2006-01-02 15:04" }}</span>
     <span>浏览 {{ .Article.Click }}</span>
   </div>
-  {{ if .Article.Keywords }}
+  {{ if .ArticleTags }}
+    <div class="tags">
+      {{ range .ArticleTags }}<a href="/tag/{{ .ID }}">{{ .Name }}</a>{{ end }}
+    </div>
+  {{ else if .Article.Keywords }}
     <div class="tags">
       {{ range splitTags .Article.Keywords }}<span>{{ . }}</span>{{ end }}
     </div>
@@ -87,11 +91,11 @@
   var comments = [];
 
   function token() {
-    return window.WJFCMGOAuth ? window.WJFCMGOAuth.token() : (localStorage.getItem('home_token') || '');
+    return window.WJFCMSGOAuth ? window.WJFCMSGOAuth.token() : (localStorage.getItem('home_token') || '');
   }
 
   function currentUser() {
-    return window.WJFCMGOAuth ? window.WJFCMGOAuth.user() : null;
+    return window.WJFCMSGOAuth ? window.WJFCMSGOAuth.user() : null;
   }
 
   function refreshAuthUI() {
@@ -243,7 +247,7 @@
   cancelReply.addEventListener('click', clearReply);
   if (commentLogout) {
     commentLogout.addEventListener('click', function () {
-      if (window.WJFCMGOAuth) window.WJFCMGOAuth.clear();
+      if (window.WJFCMSGOAuth) window.WJFCMSGOAuth.clear();
       refreshAuthUI();
     });
   }

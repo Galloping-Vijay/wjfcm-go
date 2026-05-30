@@ -11,7 +11,7 @@
 <body>
   <main class="install-wrap">
     <header class="install-head">
-      <h1>wjfcm-go 安装向导</h1>
+      <h1>wjfcms-go 安装向导</h1>
       <p>填写数据库和管理员信息后，系统会自动建表、写入初始数据并生成生产配置。</p>
     </header>
     <section class="install-card">
@@ -43,7 +43,7 @@
             <div class="install-field">
               <label for="public_dir">Public 目录</label>
               <input id="public_dir" name="public_dir" value="{{ .Form.PublicDir }}" required>
-              <span class="install-help">生产示例：/www/wwwroot/wjfcm-go/public</span>
+              <span class="install-help">生产示例：/www/wwwroot/wjfcms-go/public</span>
             </div>
             <div class="install-field">
               <label for="upload_base_path">上传目录名</label>
@@ -107,7 +107,7 @@
       </form>
       {{ end }}
     </section>
-    <p class="install-foot">Copyright © 2019-{{ .Year }} wjfcm-go</p>
+    <p class="install-foot">Copyright © 2019-{{ .Year }} wjfcms-go</p>
   </main>
 </body>
 </html>

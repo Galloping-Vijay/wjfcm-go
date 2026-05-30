@@ -3,7 +3,7 @@ package service
 import (
 	"strings"
 
-	"wjfcm-go/internal/model"
+	"wjfcms-go/internal/model"
 
 	"gorm.io/gorm"
 )

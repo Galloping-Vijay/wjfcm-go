@@ -1,8 +1,8 @@
-# wjfcm-go 独立项目上下文
+# wjfcms-go 独立项目上下文
 
 ## 项目定位
 
-`wjfcm-go` 是从旧 `laravel-wjfcms` 迁移出来的独立项目。后端使用 Gin，后台使用 Vue，前台公开页面使用 Gin 模板服务端渲染，以保证 SEO。
+`wjfcms-go` 是从旧 `laravel-wjfcms` 迁移出来的独立项目。后端使用 Gin，后台使用 Vue，前台公开页面使用 Gin 模板服务端渲染，以保证 SEO。
 
 ## 旧项目来源
 
@@ -13,12 +13,12 @@
 - 迁移进度：见 `docs/progress.md`
 - 页面清单：见 `docs/page-migration-checklist.md`
 
-如果以后只打开 `wjfcm-go` 独立目录，Codex 能继续识别新版项目；如果还需要继续对照旧 Laravel 的源码细节，需要同时提供旧项目路径或旧项目只读副本。
+如果以后只打开 `wjfcms-go` 独立目录，Codex 能继续识别新版项目；如果还需要继续对照旧 Laravel 的源码细节，需要同时提供旧项目路径或旧项目只读副本。
 
 ## 当前目录约定
 
 ```text
-wjfcm-go/
+wjfcms-go/
   server/       Gin 后端、前台 SEO 模板、API
   web/          Vue 后台管理端
   public/       站点公开静态资源、上传资源、验证文件
@@ -28,7 +28,7 @@ wjfcm-go/
 
 ## 静态资源约定
 
-`server/.env` 中 `PUBLIC_DIR=../public`，表示从 `wjfcm-go/server` 启动时，公开资源目录指向 `wjfcm-go/public`。
+`server/.env` 中 `PUBLIC_DIR=../public`，表示从 `wjfcms-go/server` 启动时，公开资源目录指向 `wjfcms-go/public`。
 
 这些根文件会直接通过域名访问：
 

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"wjfcm-go/internal/config"
+	"wjfcms-go/internal/config"
 
 	"github.com/gin-gonic/gin"
 )

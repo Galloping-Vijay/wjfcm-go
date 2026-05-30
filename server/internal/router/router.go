@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
-	"wjfcm-go/internal/config"
-	"wjfcm-go/internal/handler"
-	"wjfcm-go/internal/middleware"
-	"wjfcm-go/internal/requestlog"
+	"wjfcms-go/internal/config"
+	"wjfcms-go/internal/handler"
+	"wjfcms-go/internal/middleware"
+	"wjfcms-go/internal/requestlog"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"

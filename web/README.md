@@ -3,7 +3,7 @@
 ## 开发启动
 
 ```bash
-cd wjfcm-go/web
+cd wjfcms-go/web
 copy .env.example .env
 npm install
 npm run dev

@@ -16,10 +16,10 @@ import (
 	"sync"
 	"time"
 
-	"wjfcm-go/internal/config"
-	"wjfcm-go/internal/model"
-	"wjfcm-go/internal/response"
-	"wjfcm-go/internal/service"
+	"wjfcms-go/internal/config"
+	"wjfcms-go/internal/model"
+	"wjfcms-go/internal/response"
+	"wjfcms-go/internal/service"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -237,7 +237,7 @@ func (h *HomeAuthHandler) siteName() string {
 	if err := h.db.Where("`key` = ? AND status = ?", "site_name", 1).First(&item).Error; err == nil && strings.TrimSpace(item.Value) != "" {
 		return strings.TrimSpace(item.Value)
 	}
-	return "wjfcm-go"
+	return "wjfcms-go"
 }
 
 func (h *HomeAuthHandler) ResetPassword(c *gin.Context) {

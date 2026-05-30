@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"os"
 
-	"wjfcm-go/internal/requestlog"
-	"wjfcm-go/internal/response"
+	"wjfcms-go/internal/requestlog"
+	"wjfcms-go/internal/response"
 
 	"github.com/gin-gonic/gin"
 )

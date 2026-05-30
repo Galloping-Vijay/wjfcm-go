@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	"wjfcm-go/internal/response"
+	"wjfcms-go/internal/response"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

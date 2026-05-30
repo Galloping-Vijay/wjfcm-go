@@ -1,15 +1,15 @@
 # 无源码部署说明
 
-本文说明如何把 `wjfcm-go` 部署到服务器，但不把 Go / Vue 源码上传到服务器。服务器只保留运行必需的产物、模板、静态资源和配置。
+本文说明如何把 `wjfcms-go` 部署到服务器，但不把 Go / Vue 源码上传到服务器。服务器只保留运行必需的产物、模板、静态资源和配置。
 
 ## 部署产物包含什么
 
 当前项目的 Gin 服务运行时会读取 `server/templates/*.tmpl`，Vue 后台由 Nginx 读取 `web/dist`。因此“无源码部署包”建议包含：
 
 ```text
-wjfcm-go-release/
+wjfcms-go-release/
   server/
-    wjfcm-go-api        # Go 编译后的二进制文件
+    wjfcms-go-api        # Go 编译后的二进制文件
     .env                # 生产配置，服务器上单独维护，不提交 Git；新站点也可以通过 /install 生成
     .env.example        # 可选，安装前作为配置参考
     .install.lock       # 安装成功后生成，用于防止重复安装
@@ -50,8 +50,8 @@ docs/
 ```bash
 cd server
 go mod tidy
-# go build -o wjfcm-go-api ./cmd/api
-GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o ../release/server/wjfcm-go-api ./cmd/api
+# go build -o wjfcms-go-api ./cmd/api
+GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o ../release/server/wjfcms-go-api ./cmd/api
 ```
 
 如果在 Windows PowerShell 上交叉编译 Linux amd64：
@@ -61,12 +61,12 @@ cd server
 go mod tidy
 $env:GOOS="linux"
 $env:GOARCH="amd64"
-go build -trimpath -ldflags="-s -w" -o ..\release\server\wjfcm-go-api ./cmd/api
+go build -trimpath -ldflags="-s -w" -o ..\release\server\wjfcms-go-api ./cmd/api
 Remove-Item Env:GOOS
 Remove-Item Env:GOARCH
 ```
 
-如果服务器就是 Windows，则去掉 `GOOS/GOARCH`，输出 `wjfcm-go-api.exe`。
+如果服务器就是 Windows，则去掉 `GOOS/GOARCH`，输出 `wjfcms-go-api.exe`。
 
 ### 2. 构建 Vue 后台
 
@@ -98,7 +98,7 @@ Linux/macOS：
 rm -rf release
 mkdir -p release/server release/web release/public
 
-cp server/wjfcm-go-api release/server/
+cp server/wjfcms-go-api release/server/
 cp -r server/templates release/server/
 cp -r web/dist release/web/
 cp -r public/* release/public/
@@ -124,7 +124,7 @@ Copy-Item server\.env.example release\server\.env.example
 新服务器第一次部署时，可以先上传二进制、`templates/`、`web/dist/`、`public/` 和 `server/.env.example`，然后启动服务：
 
 ```bash
-systemctl start wjfcm-go-api
+systemctl start wjfcms-go-api
 ```
 
 打开：
@@ -147,7 +147,7 @@ https://www.example.com/install
 安装成功后需要重启服务，让新 `.env` 生效：
 
 ```bash
-systemctl restart wjfcm-go-api
+systemctl restart wjfcms-go-api
 ```
 
 然后访问：
@@ -163,7 +163,7 @@ https://www.example.com/admin/login
 示例目录：
 
 ```text
-/www/wwwroot/wjfcm-go/
+/www/wwwroot/wjfcms-go/
   server/
   web/
   public/
@@ -172,12 +172,12 @@ https://www.example.com/admin/login
 上传方式可以用 `scp`、`rsync`、宝塔文件管理、CI/CD Artifact 等。上传后确认二进制可执行：
 
 ```bash
-chmod +x /www/wwwroot/wjfcm-go/server/wjfcm-go-api
+chmod +x /www/wwwroot/wjfcms-go/server/wjfcms-go-api
 ```
 
 ## 服务器配置
 
-`/www/wwwroot/wjfcm-go/server/.env` 示例：
+`/www/wwwroot/wjfcms-go/server/.env` 示例：
 
 ```env
 APP_ENV=production
@@ -200,13 +200,13 @@ REQUEST_LOG_MAX_FILE_MB=20
 
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=wjfcm_go
-DB_USERNAME=wjfcm_go
+DB_DATABASE=wjfcms_go
+DB_USERNAME=wjfcms_go
 DB_PASSWORD=请填写生产密码
 DB_PREFIX=wjf_
 
 CORS_ALLOW_ORIGINS=https://www.example.com
-PUBLIC_DIR=/www/wwwroot/wjfcm-go/public
+PUBLIC_DIR=/www/wwwroot/wjfcms-go/public
 UPLOAD_BASE_PATH=uploads
 ```
 
@@ -218,13 +218,13 @@ UPLOAD_BASE_PATH=uploads
 
 ```ini
 [Unit]
-Description=wjfcm-go API
+Description=wjfcms-go API
 After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/www/wwwroot/wjfcm-go/server
-ExecStart=/www/wwwroot/wjfcm-go/server/wjfcm-go-api -f /www/wwwroot/wjfcm-go/server/.env
+WorkingDirectory=/www/wwwroot/wjfcms-go/server
+ExecStart=/www/wwwroot/wjfcms-go/server/wjfcms-go-api -f /www/wwwroot/wjfcms-go/server/.env
 Restart=always
 RestartSec=3
 User=www
@@ -239,9 +239,9 @@ WantedBy=multi-user.target
 
 ```bash
 systemctl daemon-reload
-systemctl enable wjfcm-go-api
-systemctl start wjfcm-go-api
-systemctl status wjfcm-go-api
+systemctl enable wjfcms-go-api
+systemctl start wjfcms-go-api
+systemctl status wjfcms-go-api
 ```
 
 ## Nginx 示例
@@ -253,7 +253,7 @@ server {
     listen 80;
     server_name www.example.com;
 
-    root /www/wwwroot/wjfcm-go/web/dist;
+    root /www/wwwroot/wjfcms-go/web/dist;
     index index.html;
 
     location ~ ^/(api|article|category|tag|search|archive|chat|login|register|forgot-password|user|install|blank|robots\.txt|sitemap\.xml|tools|wechat|baidu)(/|$) {
@@ -273,19 +273,19 @@ server {
     }
 
     location ^~ /uploads/ {
-        alias /www/wwwroot/wjfcm-go/public/uploads/;
+        alias /www/wwwroot/wjfcms-go/public/uploads/;
         expires 30d;
         access_log off;
     }
 
     location ^~ /images/ {
-        alias /www/wwwroot/wjfcm-go/public/images/;
+        alias /www/wwwroot/wjfcms-go/public/images/;
         expires 30d;
         access_log off;
     }
 
     location ~ ^/(favicon\.ico|ads\.txt|bdunion\.txt|google.*\.html)$ {
-        root /www/wwwroot/wjfcm-go/public;
+        root /www/wwwroot/wjfcms-go/public;
         access_log off;
     }
 
@@ -303,12 +303,12 @@ server {
 
 建议每次发版按这个顺序：
 
-1. 本地或 CI 编译新的 `wjfcm-go-api`。
+1. 本地或 CI 编译新的 `wjfcms-go-api`。
 2. 本地或 CI 构建新的 `web/dist`。
 3. 备份服务器当前二进制和 `web/dist`。
 4. 上传新的二进制、`templates/`、`web/dist/`。
 5. 不覆盖服务器生产 `.env` 和 `public/uploads/`。
-6. 执行 `systemctl restart wjfcm-go-api`。
+6. 执行 `systemctl restart wjfcms-go-api`。
 7. 检查首页、文章详情、后台登录、API 健康检查和上传目录。
 
 ## 检查命令

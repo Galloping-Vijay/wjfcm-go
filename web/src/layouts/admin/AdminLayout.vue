@@ -1,8 +1,8 @@
-﻿<template>
+<template>
   <div class="admin-shell" :class="{ collapsed: sidebarCollapsed }">
     <aside class="admin-sidebar">
       <div class="admin-brand">
-        <span>{{ sidebarCollapsed ? 'G' : 'wjfcm-go' }}</span>
+        <span>{{ sidebarCollapsed ? 'G' : 'wjfcms-go' }}</span>
         <button type="button" class="sidebar-toggle" :title="sidebarCollapsed ? '展开菜单' : '收起菜单'" @click="toggleSidebar">
           {{ sidebarCollapsed ? '›' : '‹' }}
         </button>
